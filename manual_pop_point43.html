@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual POP — Point 43 Londrina v2.0</title>
+<style>
+  :root {
+    --gold: #D4A017;
+    --gold-light: #FFF8E7;
+    --black: #0D0D0D;
+    --dark: #1A1A1A;
+    --gray: #F5F5F5;
+    --lgray: #E8E8E8;
+    --mgray: #999999;
+    --dkgray: #444444;
+    --green: #2D8A4E;
+    --red: #C0392B;
+    --sidebar-w: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 14px; color: var(--black); background: #fff; display: flex; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--black);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  #sidebar .logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid #333;
+  }
+  #sidebar .logo .brand { color: var(--gold); font-size: 20px; font-weight: bold; letter-spacing: 2px; }
+  #sidebar .logo .sub { color: #888; font-size: 11px; margin-top: 2px; }
+  #sidebar nav { flex: 1; padding: 12px 0; }
+  #sidebar nav a {
+    display: block;
+    padding: 8px 20px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 1.4;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+  }
+  #sidebar nav a:hover { color: var(--gold); background: rgba(212,160,23,.08); }
+  #sidebar nav a.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.1); }
+  #sidebar nav a .num { display: inline-block; width: 22px; font-weight: bold; color: var(--gold); opacity: .7; }
+  #sidebar .version { padding: 12px 20px; border-top: 1px solid #333; color: #555; font-size: 10px; }
+
+  /* ── CONTENT ── */
+  #content {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--black);
+    padding: 80px 60px;
+    text-align: center;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 4px solid var(--gold);
+  }
+  .cover .brand { color: var(--gold); font-size: 52px; font-weight: bold; letter-spacing: 6px; }
+  .cover .sport { color: #fff; font-size: 22px; letter-spacing: 4px; margin-top: 4px; }
+  .cover .divider { color: var(--gold); font-size: 20px; margin: 20px 0; letter-spacing: 4px; }
+  .cover .title { color: #fff; font-size: 34px; font-weight: bold; }
+  .cover .subtitle { color: var(--gold); font-size: 18px; margin-top: 6px; }
+  .cover .unit { color: var(--mgray); font-size: 14px; margin-top: 16px; }
+  .cover .version-tag { color: var(--mgray); font-size: 13px; margin-top: 4px; }
+  .cover .footer-line { color: #555; font-size: 12px; margin-top: 24px; }
+
+  /* ── SECTIONS ── */
+  .section { padding: 48px 60px; border-bottom: 1px solid var(--lgray); }
+  .section:last-child { border-bottom: none; }
+
+  .section-div {
+    background: var(--black);
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: bold;
+    padding: 14px 24px;
+    border-radius: 4px;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--black);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    margin-top: 8px;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--dark);
+    margin: 28px 0 12px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--dkgray);
+    margin: 18px 0 8px;
+  }
+  p.text { margin: 6px 0; line-height: 1.6; }
+
+  ul.bullets { list-style: none; padding: 0; margin: 8px 0; }
+  ul.bullets li { padding: 3px 0 3px 20px; position: relative; line-height: 1.5; }
+  ul.bullets li::before { content: "•"; position: absolute; left: 4px; color: var(--black); }
+
+  ol.numbered { padding-left: 24px; margin: 8px 0; }
+  ol.numbered li { padding: 3px 0; line-height: 1.5; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th {
+    background: var(--black);
+    color: var(--gold);
+    font-weight: bold;
+    padding: 8px 10px;
+    text-align: center;
+    border: 1px solid #333;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  tr:nth-child(even) td { background: var(--gray); }
+  td.bold { font-weight: bold; }
+  td.center { text-align: center; }
+  td.green { color: var(--green); font-weight: bold; }
+  td.red { color: var(--red); font-weight: bold; }
+  td.link { color: #1155CC; font-size: 12px; word-break: break-all; }
+
+  /* ── ALERT BOXES ── */
+  .alert {
+    border-left: 5px solid var(--gold);
+    border-top: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    background: var(--gold-light);
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .alert.red-alert {
+    border-color: var(--red);
+    background: #FFF5F5;
+  }
+  .alert .alert-title { font-weight: bold; font-size: 13px; margin-bottom: 4px; }
+  .alert .alert-body { font-size: 13px; color: var(--dark); line-height: 1.5; }
+
+  /* ── MSG BOXES ── */
+  .msgbox {
+    background: #F0F0F0;
+    border: 1px solid #AAA;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 10px 0;
+  }
+  .msgbox .msg-label { font-weight: bold; font-style: italic; font-size: 11px; color: var(--dkgray); margin-bottom: 6px; }
+  .msgbox .msg-text { font-style: italic; font-size: 13px; color: var(--dark); line-height: 1.6; white-space: pre-line; }
+
+  /* ── PROGRESSION BOX ── */
+  .progression {
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    padding: 14px 18px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 12px 0;
+    line-height: 1.8;
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; padding: 0; margin: 8px 0; }
+  .checklist li { padding: 6px 10px 6px 32px; position: relative; border-bottom: 1px solid var(--lgray); }
+  .checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 8px;
+    font-size: 16px;
+    color: var(--dkgray);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    #sidebar { display: none; }
+    #content { margin-left: 0; }
+    .section { page-break-inside: avoid; }
+    .section-div { page-break-before: always; }
+  }
+
+  /* ── SCROLL SPY ── */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside id="sidebar">
+  <div class="logo">
+    <div class="brand">POINT 43</div>
+    <div class="sub">Manual POP v2.0 — Londrina</div>
+  </div>
+  <nav>
+    <a href="#cover"><span class="num">⌂</span> Capa</a>
+    <a href="#s1"><span class="num">1</span> A Empresa</a>
+    <a href="#s2"><span class="num">2</span> Atendimento</a>
+    <a href="#s3"><span class="num">3</span> Links e Grupos</a>
+    <a href="#s4"><span class="num">4</span> Rotinas</a>
+    <a href="#s5"><span class="num">5</span> Planos e Preços</a>
+    <a href="#s6"><span class="num">6</span> Processo de Venda</a>
+    <a href="#s7"><span class="num">7</span> Mensagens</a>
+    <a href="#s8"><span class="num">8</span> Operação Quadras</a>
+    <a href="#s9"><span class="num">9</span> PointBot</a>
+    <a href="#s10"><span class="num">10</span> Financeiro</a>
+    <a href="#s11"><span class="num">11</span> Programas</a>
+    <a href="#s12"><span class="num">12</span> Pós-Venda</a>
+    <a href="#s13"><span class="num">13</span> Situações Especiais</a>
+    <a href="#s14"><span class="num">14</span> KPIs e SLAs</a>
+    <a href="#s15"><span class="num">15</span> RACI</a>
+    <a href="#s16"><span class="num">16</span> Fechamento de Mês</a>
+    <a href="#s17"><span class="num">17</span> Onboarding</a>
+    <a href="#s18"><span class="num">18</span> LGPD</a>
+    <a href="#s19"><span class="num">19</span> Controle de Versão</a>
+  </nav>
+  <div class="version">Versão 2.0 — Junho/2026<br>Documento interno confidencial</div>
+</aside>
+
+<!-- ══ CONTENT ══ -->
+<main id="content">
+
+  <!-- CAPA -->
+  <div class="cover" id="cover">
+    <div class="brand">POINT 43</div>
+    <div class="sport">BEACH TENNIS</div>
+    <div class="divider">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+    <div class="title">MANUAL POP</div>
+    <div class="subtitle">Procedimentos Operacionais Padrão</div>
+    <div class="unit">Unidade Londrina — Orla Palhano</div>
+    <div class="version-tag">Versão 2.0 — Junho/2026</div>
+    <div class="footer-line">point43.com.br &nbsp;|&nbsp; @point43beachtennis &nbsp;|&nbsp; Londrina — PR</div>
+  </div>
+
+  <!-- ══════ S1 — EMPRESA ══════ -->
+  <div class="section" id="s1">
+    <div class="section-div">SEÇÃO 1 — A EMPRESA</div>
+    <h1>1. Quem é o Point 43</h1>
+    <p class="text">Rede de beach tennis fundada por Gustavo Hoewell e Mateus Mineto em 11/02/2020 em Londrina (PR), com meta de 300 unidades franqueadas até 2030. Mais do que uma academia, o Point 43 é uma comunidade. Cada colaborador é responsável por fazer o aluno querer voltar toda semana.</p>
+
+    <h2>1.1 Estrutura de Liderança</h2>
+    <table>
+      <tr><th>Cargo</th><th>Pessoa</th><th>Responsabilidade</th></tr>
+      <tr><td class="bold">CEO</td><td>Gustavo Hoewell</td><td>Visão, estratégia, produtos, expansão</td></tr>
+      <tr><td class="bold">COO</td><td>Mateus</td><td>Operações, execução, processos internos</td></tr>
+      <tr><td class="bold">CFO / RH</td><td>Benedito</td><td>Financeiro, gestão de pessoas e RH</td></tr>
+    </table>
+
+    <h2>1.2 Unidade</h2>
+    <table>
+      <tr><th>Unidade</th><th>Endereço</th><th>Quadras</th><th>Referência</th></tr>
+      <tr><td class="bold">Point 43 Londrina</td><td>R. José Monteiro de Mello, 122 — Orla Palhano</td><td class="center">4 quadras</td><td>Desde 11/02/2020</td></tr>
+    </table>
+
+    <h2>1.3 Horário de Funcionamento</h2>
+    <table>
+      <tr><th>Período</th><th>Horário</th></tr>
+      <tr><td class="bold">Segunda a Sexta</td><td>07h às 22h</td></tr>
+      <tr><td class="bold">Sábados, Domingos e Feriados</td><td>08h às 20h</td></tr>
+    </table>
+
+    <h2>1.4 Valores</h2>
+    <ul class="bullets">
+      <li><strong>Comunidade:</strong> o aluno é parte da família Point 43, não apenas um cliente</li>
+      <li><strong>Excelência:</strong> padrão alto em tudo — atendimento, infraestrutura, metodologia</li>
+      <li><strong>Alta performance:</strong> cultura de crescimento contínuo, para alunos e colaboradores</li>
+      <li><strong>Responsabilidade:</strong> cada um é dono do resultado da sua função</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S2 — ATENDIMENTO ══════ -->
+  <div class="section" id="s2">
+    <div class="section-div">SEÇÃO 2 — DIRETRIZES DE ATENDIMENTO E TOM DE VOZ</div>
+    <h1>2. Diretrizes de Atendimento</h1>
+
+    <h2>2.1 Tom de Voz</h2>
+    <ul class="bullets">
+      <li>Amigável, consultivo, objetivo, propositivo</li>
+      <li>Frases curtas. Linguagem de conversa, não de documento</li>
+      <li>Emojis moderados e contextuais</li>
+      <li>CTA claro em toda mensagem com ação esperada</li>
+      <li>Público: todos os níveis — linguagem simples, sem jargões técnicos</li>
+      <li>Nunca usar: "iniciante", "intermediário", "avançado", "fraco", "fácil", "difícil"</li>
+    </ul>
+
+    <h2>2.2 Canais Oficiais</h2>
+    <ul class="bullets">
+      <li>WhatsApp Business (número oficial): wa.me/5543999659158</li>
+      <li>FitZap CRM (atendimento automatizado + humano)</li>
+      <li>Tecnofit (cadastros, planos, check-ins)</li>
+      <li>E-mail institucional: point43oficial@gmail.com</li>
+    </ul>
+
+    <h2>2.3 SLAs de Atendimento</h2>
+    <table>
+      <tr><th>Tipo de contato</th><th>Meta de resposta</th><th>Canal</th></tr>
+      <tr><td>Lead novo (WhatsApp / Instagram)</td><td class="green">≤ 5 minutos</td><td>WhatsApp / FitZap</td></tr>
+      <tr><td>Lead parado no FitzAp (sem resposta)</td><td class="bold">18 horas</td><td>FitZap</td></tr>
+      <tr><td>Aluno ativo — dúvida geral</td><td class="bold">≤ 2h úteis</td><td>WhatsApp / FitZap</td></tr>
+      <tr><td>Cobrança / inadimplência</td><td class="bold">D+0 até D+5</td><td>WhatsApp + E-mail</td></tr>
+      <tr><td>Cancelamento / pedido formal</td><td class="bold">≤ 24h úteis</td><td>E-mail</td></tr>
+    </table>
+
+    <div class="alert">
+      <div class="alert-title">⚠️ Regra de leads inativos</div>
+      <div class="alert-body">Lead parado no FitzAp por 18 horas sem resposta deve ser assumido pela equipe do turno — independente de quem era o responsável original. Nenhum lead pode ficar sem atendimento por falta de cobertura interna.</div>
+    </div>
+
+    <h2>2.4 Princípios Inegociáveis</h2>
+    <ul class="bullets">
+      <li>Nunca deixar o cliente sem resposta — se não sabe, escalona imediatamente</li>
+      <li>Nunca pedir ao cliente que "ligue para outro setor" ou "faça você mesmo"</li>
+      <li>Nunca prometer o que não pode cumprir</li>
+    </ul>
+
+    <div class="alert">
+      <div class="alert-title">⚠️ Regra de ouro</div>
+      <div class="alert-body">Entre agradar o cliente e proteger a escolha correta para ele — sempre proteger a escolha correta. Dar desconto não autorizado ou prometer o que não existe prejudica a operação inteira.</div>
+    </div>
+
+    <h2>2.5 Frases Oficiais</h2>
+    <table>
+      <tr><th>Situação</th><th>O que dizer</th></tr>
+      <tr><td>Não sabe a resposta</td><td>"Boa pergunta. Vou verificar isso internamente e te retorno já."</td></tr>
+      <tr><td>Precisa escalar internamente</td><td>"Vou direcionar isso internamente e te retorno por aqui."</td></tr>
+      <tr><td>Encerramento de atendimento</td><td>"Imagina! Qualquer coisa que precisar, estou por aqui 😊"</td></tr>
+      <tr><td>Aluno insatisfeito</td><td>Ouvir sem interromper, validar o sentimento, resolver ou escalar. Nunca discutir.</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S3 — DIRETÓRIO ══════ -->
+  <div class="section" id="s3">
+    <div class="section-div">SEÇÃO 3 — DIRETÓRIO DE LINKS E GRUPOS</div>
+    <h1>3. Diretório Completo de Links</h1>
+
+    <h2>3.1 Grupos de Alunos — Munhequeiras</h2>
+    <table>
+      <tr><th>Munhequeira</th><th>Link WhatsApp</th></tr>
+      <tr><td>🟡 Start</td><td class="link">https://chat.whatsapp.com/HS4eKzyh0THCwjxfMEiCVj</td></tr>
+      <tr><td>⚪ Branca</td><td class="link">https://chat.whatsapp.com/KFWwxMtbZgk9jPXaGodLCD</td></tr>
+      <tr><td>⚪ Branca+</td><td class="link">https://chat.whatsapp.com/CY9n6FhpUGaDWlq2f8V1GS</td></tr>
+      <tr><td>🔵 Azul</td><td class="link">https://chat.whatsapp.com/GhtyRiNPoXJ0olRYAc7nmc</td></tr>
+      <tr><td>🔵 Azul+</td><td class="link">https://chat.whatsapp.com/J7gcQjE0lRD1oFQg62lpZV</td></tr>
+      <tr><td>🔴 Vermelha</td><td class="link">https://chat.whatsapp.com/D8mB9FdGiE8HlazMdgk3tY</td></tr>
+      <tr><td>🔴 Vermelha+</td><td class="link">https://chat.whatsapp.com/IdvjQbky4EfBLALuFM6611</td></tr>
+      <tr><td>🟢 Verde</td><td class="link">https://chat.whatsapp.com/LwSEi4yryTFCI5E3o5waUd</td></tr>
+      <tr><td>🟢 Verde+</td><td class="link">https://chat.whatsapp.com/I5Uu0il1GXxGaHQ2HK58Yt</td></tr>
+      <tr><td>🟣 Roxa</td><td class="link">https://chat.whatsapp.com/BujvfA6KgoD0rzMoPzQuwb</td></tr>
+      <tr><td>🟣 Roxa+</td><td class="link">https://chat.whatsapp.com/HD3IBlM6j2wGsJbbokSwoT</td></tr>
+      <tr><td>🦈 Kids (Tubarão)</td><td class="link">https://chat.whatsapp.com/CUWKSemwGdk9B2UKrHDBxC</td></tr>
+      <tr><td>🎠 Infanto-Juvenil</td><td class="link">https://chat.whatsapp.com/EagNInzaQks25xyeTuIndD</td></tr>
+    </table>
+
+    <h2>3.2 Grupos Internos da Equipe</h2>
+    <table>
+      <tr><th>Grupo</th><th>Link</th></tr>
+      <tr><td>Staff</td><td class="link">https://chat.whatsapp.com/CbAVrhO3K2FEO2tPSMB5NU</td></tr>
+      <tr><td>Marketing</td><td class="link">https://chat.whatsapp.com/GIQVSwdhCKYE52O7pqF6Ts</td></tr>
+      <tr><td>Backoffice</td><td class="link">https://chat.whatsapp.com/FXMLv5EpU40FdLI0zIty9N</td></tr>
+      <tr><td>Entradas Parador</td><td class="link">https://chat.whatsapp.com/KG6NRYNmrmj4HcuYUE9vzA</td></tr>
+      <tr><td>Munhequeiras (gestão)</td><td class="link">https://chat.whatsapp.com/BStsrVibZ846EwjSSbwnj2</td></tr>
+      <tr><td>Mensagens Padrão</td><td class="link">https://chat.whatsapp.com/D9000SGsTZf0GZLlDbLdFZ</td></tr>
+      <tr><td>Tarefas ADM Parador</td><td class="link">https://chat.whatsapp.com/DvBawMLEiLE1t01NHIBpHF</td></tr>
+      <tr><td>Programa Credenciados</td><td class="link">https://chat.whatsapp.com/EQrVJNOr0sX2brpD5b1HLv</td></tr>
+      <tr><td>Pedidos Aulas</td><td class="link">https://chat.whatsapp.com/IOP73KX4qEvJ8UTSCFiTef</td></tr>
+      <tr><td>Relatórios</td><td class="link">https://chat.whatsapp.com/GzHPNDD8BItAzSfP63VFdk</td></tr>
+      <tr><td>Leads</td><td class="link">https://chat.whatsapp.com/JalSEhWj3jyGHBzoGDkuLA</td></tr>
+      <tr><td>Wellhub / TotalPass</td><td class="link">https://chat.whatsapp.com/BazEsIgskeC5ew6dNH1gRk</td></tr>
+      <tr><td>Fisioterapia (MedSports)</td><td class="link">https://chat.whatsapp.com/F3oHGxEdDUjBf9bXgxJSzH</td></tr>
+    </table>
+
+    <h2>3.3 Apps, Links e Materiais</h2>
+    <table>
+      <tr><th>Recurso</th><th>Link</th></tr>
+      <tr><td>App Point 43 — iOS</td><td class="link">https://apps.apple.com/us/app/point-43/id1570310003</td></tr>
+      <tr><td>App Point 43 — Android</td><td class="link">https://play.google.com/store/apps/details?id=br.com.point43</td></tr>
+      <tr><td>Tutorial App (vídeo)</td><td class="link">https://youtube.com/shorts/Dn1qMr_A9BI?feature=share</td></tr>
+      <tr><td>Metodologia Point 43</td><td class="link">https://drive.google.com/file/d/12N6WqjvvOmY7bMJE9HjtX7p6LnIzW9ht/view</td></tr>
+      <tr><td>Mídia Kit Comercial</td><td class="link">https://drive.google.com/file/d/1YfBYhNJLUr1UMtVa18lDHAi59bTdMaMJ/view</td></tr>
+      <tr><td>Imagens dos Planos (Drive)</td><td class="link">https://drive.google.com/drive/folders/1Q08VVkWBZbW7Ttsc5LUBwvXOr9WpjejU</td></tr>
+      <tr><td>Instagram</td><td class="link">@point43beachtennis</td></tr>
+      <tr><td>Site Point 43</td><td class="link">https://point43.com.br</td></tr>
+      <tr><td>WhatsApp Oficial</td><td class="link">wa.me/5543999659158</td></tr>
+      <tr><td>PIX CNPJ</td><td>25.149.720/0001-44 — Foccos Serviços Fitness LTDA</td></tr>
+      <tr><td>E-mail cancelamentos</td><td class="link">point43oficial@gmail.com</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S4 — ROTINAS ══════ -->
+  <div class="section" id="s4">
+    <div class="section-div">SEÇÃO 4 — ROTINAS DIÁRIAS E SEMANAIS</div>
+    <h1>4. Rotinas do Backoffice</h1>
+
+    <h2>4.1 Rotina Diária — Fluxo por Colaborador</h2>
+    <p class="text">Cada colaborador tem um bloco de responsabilidades fixas conforme seu turno. Seguir rigorosamente a ordem abaixo.</p>
+
+    <table style="margin-top:16px">
+      <tr><th style="width:100px">Horário</th><th style="width:120px">Responsável</th><th>Tarefas</th></tr>
+      <tr>
+        <td class="center bold">08:00</td>
+        <td class="center bold">Emilly</td>
+        <td>
+          <ol class="numbered">
+            <li>Renovação de planos</li>
+            <li>Verificar vencimentos de contrato</li>
+            <li>Wellhub / TotalPass</li>
+            <li>FitZap — atendimentos gerais</li>
+            <li>Ativar leads</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="center bold">11:00</td>
+        <td class="center bold">Julia</td>
+        <td>
+          <ol class="numbered">
+            <li>Wellhub / TotalPass</li>
+            <li>Grupos WhatsApp</li>
+            <li>FitZap — atendimentos gerais</li>
+            <li><strong>11:30 — Verificar agenda e divulgar aulas disponíveis</strong></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="center bold">13:00–17:00</td>
+        <td class="center bold">Emilly</td>
+        <td>
+          <ol class="numbered">
+            <li>Vendas</li>
+            <li>Relatório</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="center bold">13:30</td>
+        <td class="center bold">Luana</td>
+        <td>
+          <ol class="numbered">
+            <li>FitZap / Grupos</li>
+            <li>Cobranças</li>
+            <li><strong>14:30 até 17:00 — Prospecção ativa: reativar leads com atendimento fechado, chamar indicações, soltar campanhas</strong></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="center bold">16:00–22:00</td>
+        <td class="center bold">Julia</td>
+        <td>
+          <ol class="numbered">
+            <li>Grupos WhatsApp</li>
+            <li>Duplicar check-in</li>
+            <li>Munhequeiras</li>
+            <li>Verificar agenda e divulgar aulas do dia seguinte</li>
+            <li>Wellhub / TotalPass</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="center bold">17:00–19:30</td>
+        <td class="center bold">Luana</td>
+        <td>
+          <ol class="numbered">
+            <li>FitZap</li>
+            <li>Relatório</li>
+          </ol>
+        </td>
+      </tr>
+    </table>
+
+    <div class="alert">
+      <div class="alert-title">Checklist de abertura (todos os turnos)</div>
+      <div class="alert-body">Ao iniciar o turno: verificar grupos para avisos de chuva ou cancelamento, checar FitZap e confirmar se o PointBot está respondendo normalmente.</div>
+    </div>
+
+    <h2>4.2 Rotina Semanal</h2>
+    <table>
+      <tr><th>Tarefa</th><th>Responsável</th></tr>
+      <tr><td>Verificar agenda dos professores e grade de aulas</td><td>Mateus (COO)</td></tr>
+      <tr><td>Atualizar relatório total de check-ins do mês para acompanhar meta</td><td>Mateus (COO)</td></tr>
+      <tr><td>Auditar inadimplência</td><td>Benedito (CFO)</td></tr>
+      <tr><td>Revisão dos atendimentos da semana</td><td>Gustavo (CEO)</td></tr>
+      <tr><td>Revisar atualizações de documentos gerais</td><td>Gustavo (CEO)</td></tr>
+      <tr><td>Atualizar relatório de leads x conversões</td><td>Gustavo (CEO)</td></tr>
+      <tr><td>Olhar relatório de alunos cancelados e planejar ações de reativação</td><td>Sócios</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S5 — PLANOS ══════ -->
+  <div class="section" id="s5">
+    <div class="section-div">SEÇÃO 5 — PLANOS, PREÇOS E REGRAS COMERCIAIS</div>
+    <h1>5. Planos e Preços Oficiais</h1>
+    <p class="text">Tabela vigente — Junho/2026. Nunca informar valores diferentes dos abaixo sem autorização da coordenação.</p>
+
+    <h2>5.1 Tabela Oficial de Planos</h2>
+    <table>
+      <tr><th>Plano</th><th>6 cr./mês</th><th>72 cr. (anual)</th><th>Antecedência</th><th>Compartilha</th></tr>
+      <tr><td class="bold">Light</td><td>R$ 159,90/mês</td><td>R$ 29,90 + 11x R$ 159,90</td><td class="center">24h</td><td class="center">Não</td></tr>
+      <tr><td class="bold">Experience</td><td>R$ 199,90/mês</td><td>R$ 29,90 + 11x R$ 189,90</td><td class="center">24h</td><td class="center">Não</td></tr>
+      <tr><td class="bold">Black</td><td>R$ 249,90/mês</td><td>R$ 29,90 + 11x R$ 249,90</td><td class="center">7 dias</td><td class="center green">Sim</td></tr>
+      <tr><td class="bold">Infinity</td><td>R$ 299,90/mês</td><td>R$ 29,90 + 11x R$ 299,90</td><td class="center">Livre</td><td class="center green">Sim</td></tr>
+      <tr><td class="bold">Crédito avulso</td><td>R$ 55,00/cr.</td><td class="center">—</td><td class="center">Livre</td><td class="center">—</td></tr>
+    </table>
+
+    <div class="alert">
+      <div class="alert-title">Plano Infinity</div>
+      <div class="alert-body">NÃO é ilimitado. É um plano recorrente com créditos que não expiram — ou seja, créditos não usados no mês são acumulados e podem ser resgatados sem custo no mês seguinte. Nunca comunicar como "ilimitado".</div>
+    </div>
+
+    <h2>5.2 Horários de Aula por Plano</h2>
+    <table>
+      <tr><th>Plano</th><th>Horários disponíveis</th></tr>
+      <tr><td>Light</td><td>Até às 18h (não acessa horários noturnos)</td></tr>
+      <tr><td>Experience / Black / Infinity</td><td>Todos os horários</td></tr>
+    </table>
+
+    <h2>5.3 Regras de Agendamento e Crédito</h2>
+    <table>
+      <tr><th>Plano</th><th>Antecedência máx.</th><th>Cancelamento</th><th>Check-in mínimo</th></tr>
+      <tr><td>Light / Experience</td><td>24 horas antes</td><td>Até 2h antes</td><td>Até 30 min antes</td></tr>
+      <tr><td>Black</td><td>7 dias antes</td><td>Até 2h antes</td><td>Até 30 min antes</td></tr>
+      <tr><td>Infinity / Avulso</td><td>Antecedência livre</td><td>Até 2h antes</td><td>Até 30 min antes</td></tr>
+    </table>
+
+    <h2>5.4 Regras Especiais de Crédito</h2>
+    <ul class="bullets">
+      <li>Créditos expirados do mês anterior: resgate por R$ 10,00/crédito (alunos regulares) ou R$ 15,00/crédito (alunos Wellhub) — política interna, não divulgar proativamente. Alternativa: acumular os créditos para o mês seguinte sem custo.</li>
+      <li>Prorrogação de créditos: taxa de R$ 5,00 por dia adicional</li>
+      <li>Infinity: créditos não expiram — acumulam para o mês seguinte</li>
+      <li>Plano Black: permite compartilhamento de conta</li>
+      <li>Plano Light e Experience: transferência de créditos a terceiros é proibida contratualmente</li>
+    </ul>
+
+    <h2>5.5 Aula com 1 Único Aluno</h2>
+    <div class="alert">
+      <div class="alert-title">Regra contratual</div>
+      <div class="alert-body">Quando apenas um aluno comparecer à aula, esta será realizada no formato individual com duração de 30 minutos, sem custo adicional ao aluno. Comunicar ao professor antes do início.</div>
+    </div>
+
+    <h2>5.6 Desconto Familiar</h2>
+    <div class="alert">
+      <div class="alert-title">Desconto autorizado</div>
+      <div class="alert-body">A partir de 2 pessoas da mesma família: 10% de desconto. Válido para todos os planos (Light, Experience, Black e Infinity). Descontos acima de 10% devem ser solicitados à administração. O máximo autorizado para o colaborador é 10%.</div>
+    </div>
+
+    <h2>5.7 Programa de Indicação</h2>
+    <ul class="bullets">
+      <li>A cada 4 contatos de não-alunos indicados: 1 crédito avulso para o aluno indicador</li>
+      <li>Não é necessário que os indicados se matriculem para o crédito ser concedido</li>
+      <li>Coletar: nome e telefone dos indicados</li>
+    </ul>
+
+    <h2>5.8 Aula Experimental e Garantia de Satisfação</h2>
+    <ul class="bullets">
+      <li>Preferência: Garantia de Satisfação — tentar converter direto para plano antes</li>
+      <li>Argumento: "A 1ª aula já funciona como teste. Se não gostar, devolvemos 100% no mesmo dia."</li>
+      <li>Prazo da garantia: reembolso somente no mesmo dia da primeira aula, mediante comunicação formal. Após isso, aplica-se a política normal de cancelamento.</li>
+      <li>Só oferecer experimental pago se o lead recusar o plano 2 vezes</li>
+      <li>Valor experimental: R$ 30,00 — pagamento antecipado (link Tecnofit ou PIX)</li>
+      <li>Coletar: nome completo, CPF, data de nascimento, e-mail, WhatsApp</li>
+      <li>Nunca prometer vaga sem verificar disponibilidade</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S6 — VENDA ══════ -->
+  <div class="section" id="s6">
+    <div class="section-div">SEÇÃO 6 — PROCESSO DE VENDA CONSULTIVA</div>
+    <h1>6. Processo de Venda</h1>
+
+    <h2>6.1 Fluxo Macro</h2>
+    <p class="text">Lead → apresentação → diagnóstico (6 perguntas) → proposta → pré-cadastro → fechamento → boas-vindas → follow-up → cross/upsell</p>
+
+    <h2>6.2 As 6 Perguntas do Funil</h2>
+    <p class="text">Nunca dar informações de plano antes de coletar as 6 respostas. Uma pergunta por vez.</p>
+    <table style="margin-top:12px">
+      <tr><th style="width:40px">#</th><th>Pergunta</th></tr>
+      <tr><td class="center bold">1</td><td>Qual é o seu objetivo hoje com o beach tennis?</td></tr>
+      <tr><td class="center bold">2</td><td>Você já jogou beach tennis alguma vez?</td></tr>
+      <tr><td class="center bold">3</td><td>Quantas vezes por semana gostaria de treinar? (1x, 2x, 3x ou mais)</td></tr>
+      <tr><td class="center bold">4</td><td>Qual período fica melhor: manhã, tarde ou noite?</td></tr>
+      <tr><td class="center bold">5</td><td>Pretende usar o plano sozinho(a) ou compartilhar créditos com alguém?</td></tr>
+      <tr><td class="center bold">6</td><td>Prefere agendar com 24h, 7 dias ou antecedência livre?</td></tr>
+    </table>
+
+    <h2>6.3 Motor de Decisão de Plano</h2>
+    <table>
+      <tr><th>Período</th><th>Compartilha?</th><th>Antecedência</th><th>Plano</th></tr>
+      <tr><td>Manhã/tarde</td><td>Não</td><td>24h</td><td class="bold">Light</td></tr>
+      <tr><td>Qualquer</td><td>Não</td><td>24h</td><td class="bold">Experience</td></tr>
+      <tr><td>Qualquer</td><td>Sim</td><td>7 dias</td><td class="bold">Black</td></tr>
+      <tr><td>Qualquer</td><td>Sim</td><td>Livre</td><td class="bold">Infinity</td></tr>
+    </table>
+    <p class="text" style="margin-top:8px">Filtros: noite → Light proibido. Compartilha → Light e Experience proibidos.</p>
+
+    <h2>6.4 Pré-cadastro (dados obrigatórios)</h2>
+    <ul class="bullets">
+      <li>Nome completo</li>
+      <li>E-mail</li>
+      <li>Data de nascimento</li>
+      <li>CPF</li>
+      <li>WhatsApp</li>
+      <li>CEP e endereço completo</li>
+      <li>Plano escolhido</li>
+      <li>Unidade</li>
+    </ul>
+
+    <h2>6.5 Objeções Comuns</h2>
+    <table>
+      <tr><th>Objeção</th><th>Como responder</th></tr>
+      <tr><td>"É caro"</td><td>Mostrar custo por aula. Ex: Experience R$199,90 = R$33,32/aula (6 aulas/mês). Black R$249,90 = R$41,65/aula. Comparar com academia convencional.</td></tr>
+      <tr><td>"Quero só experimentar"</td><td>Apresentar Garantia de Satisfação primeiro. Se recusar 2x, oferecer experimental R$30.</td></tr>
+      <tr><td>"Vou pensar"</td><td>Validar. Perguntar o que ficou em dúvida. Não pressionar. Oferecer canal direto.</td></tr>
+      <tr><td>"Tem algo mais barato?"</td><td>Explicar o que ele perde ao descer de plano. Só oferecer downsell se realmente não houver encaixe.</td></tr>
+      <tr><td>Desconto familiar</td><td>A partir de 2 pessoas da mesma família: 10% em todos os planos. Máximo autorizado: 10%.</td></tr>
+    </table>
+
+    <h2>6.6 Links de Pagamento Oficiais (Tecnofit)</h2>
+    <table>
+      <tr><th>Plano</th><th>Link</th></tr>
+      <tr><td>Light 6 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/OTE4MzYy</td></tr>
+      <tr><td>Light 72 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTAwNzAyMw</td></tr>
+      <tr><td>Experience 6 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/OTE4Mzcz</td></tr>
+      <tr><td>Experience 72 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTAwNzAyOA</td></tr>
+      <tr><td>Black 6 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTA0NDI5OA</td></tr>
+      <tr><td>Black 72 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTAwNzAxNQ</td></tr>
+      <tr><td>Infinity 6 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTAzMTA5NA</td></tr>
+      <tr><td>Infinity 72 cr.</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MTAzMTEyMA</td></tr>
+      <tr><td>Crédito Avulso</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/MzkwOTU4</td></tr>
+      <tr><td>Experimental</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/NDk5ODkw</td></tr>
+      <tr><td>Convidado Day Use</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/NDQ4NTcz</td></tr>
+      <tr><td>Rei e Rainha (convid.)</td><td class="link">https://app.tecnofit.com.br/ng/online-sale/MTM4MzE/checkout/ODk5Mzk2</td></tr>
+    </table>
+
+    <h2>6.7 Upgrade e Downgrade de Plano</h2>
+    <ul class="bullets">
+      <li>O aluno pode solicitar upgrade ou downgrade a qualquer momento, desde que antes da renovação do ciclo atual</li>
+      <li>Ajustes são realizados pelo Backoffice — nunca pelo próprio aluno</li>
+      <li>Créditos do plano anterior não são convertidos em créditos de planos superiores</li>
+      <li>Solicitação por e-mail: point43oficial@gmail.com (taxa de serviço de R$ 25,00)</li>
+    </ul>
+
+    <h2>6.8 Cross-sell e Freemium</h2>
+    <ul class="bullets">
+      <li>Aula individual de onboarding técnico: R$ 49,90 — oferecer após matrícula para calibrar nível e acelerar evolução</li>
+      <li>Plano Freemium: experiência de baixo atrito para lead que não fecha — participa de aulas e eventos sem contrato para nutrição do lead</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S7 — MENSAGENS ══════ -->
+  <div class="section" id="s7">
+    <div class="section-div">SEÇÃO 7 — MODELOS DE MENSAGENS</div>
+    <h1>7. Modelos de Mensagens (Copiar / Colar)</h1>
+    <p class="text">Ajuste variáveis <strong>{{NOME}}</strong>, <strong>{{MUNHEQUEIRA}}</strong>, <strong>{{UNIDADE}}</strong>, <strong>{{HORARIO}}</strong> antes de enviar.</p>
+
+    <h2>7.1 Vagas do Dia / Amanhã</h2>
+    <div class="msgbox">
+      <div class="msg-label">HOJE — /vagas-hoje</div>
+      <div class="msg-text">Confira as vagas que temos HOJE na munhequeira {{MUNHEQUEIRA}} 🤩
+Point 43 - {{UNIDADE}} 📍
+{{LISTA_VAGAS}}
+Bora? {{CTA}}</div>
+    </div>
+    <div class="msgbox">
+      <div class="msg-label">AMANHÃ — /vagas-amanha</div>
+      <div class="msg-text">Confira as vagas que temos AMANHÃ na munhequeira {{MUNHEQUEIRA}} 🤩
+Point 43 - {{UNIDADE}} 📍
+{{LISTA_VAGAS}}
+Bora? {{CTA}}</div>
+    </div>
+
+    <h2>7.2 Aviso de Chuva</h2>
+    <div class="msgbox">
+      <div class="msg-label">Unidade inteira — /chuva-total</div>
+      <div class="msg-text">🌧️ Atenção! 🌧️
+Todas as aulas de HOJE da unidade {{UNIDADE}} foram adiadas devido à chuva.
+Os créditos retornam para você.
+Qualquer dúvida, estamos à disposição 👍🏻</div>
+    </div>
+    <div class="msgbox">
+      <div class="msg-label">Faixa específica — /chuva-faixa</div>
+      <div class="msg-text">🌧️ Atenção! 🌧️
+As aulas da munhequeira {{MUNHEQUEIRA}} às {{HORA_FIM}} da unidade {{UNIDADE}} foram adiadas devido à chuva.
+Os créditos retornam para você.
+Qualquer dúvida, estamos à disposição 👍🏻</div>
+    </div>
+
+    <h2>7.3 Boas-vindas ao Novo Aluno</h2>
+    <div class="msgbox">
+      <div class="msg-label">/boas-vindas</div>
+      <div class="msg-text">Bem-vindo(a) ao Point 43! 🎉
+
+App iOS: https://apps.apple.com/us/app/point-43/id1570310003
+App Android: https://play.google.com/store/apps/details?id=br.com.point43
+
+Aceite o termo enviado por e-mail e já marque suas aulas.
+
+✔️ Check-in: abre 24h antes, fecha 30min antes
+✔️ Cancelamento: até 2h antes (crédito retorna)
+✔️ Créditos expiram em 30 dias
+✔️ Pausas/cancelamentos: point43oficial@gmail.com
+
+Grupo oficial: {{LINK_GRUPO_MUNHEQUEIRA}}</div>
+    </div>
+
+    <h2>7.4 Wellhub / TotalPass — Passo a Passo</h2>
+    <div class="msgbox">
+      <div class="msg-label">/wellhub</div>
+      <div class="msg-text">Aqui está o passo a passo para utilizar o Wellhub/TotalPass 👇🏻
+
+👉🏻 Plano aceito Wellhub: Silver+
+👉🏻 Plano aceito TotalPass: TP5
+
+1️⃣ Faça check-in no app Wellhub/TotalPass a 300m da unidade
+2️⃣ Envie o print do token neste grupo: https://chat.whatsapp.com/BazEsIgskeC5ew6dNH1gRk
+3️⃣ Escolha dia e horário no App Point 43
+4️⃣ Seu crédito fica válido por 3 dias!
+
+⚠️ Horário de liberação: Seg–Sex das 08h às 22h
+⚠️ As aulas aparecem somente após liberação do crédito</div>
+    </div>
+
+    <h2>7.5 Cancelamento — /canc</h2>
+    <div class="msgbox">
+      <div class="msg-label">/canc</div>
+      <div class="msg-text">Para cancelar, você deve nos encaminhar uma solicitação no e-mail abaixo. A necessidade do e-mail se dá pelo fato de ser outro setor responsável pelos cancelamentos.
+
+É de extrema importância encaminhar o e-mail o quanto antes, caso contrário o sistema continuará contabilizando você como aluno.
+
+👉🏼 E-mail: point43oficial@gmail.com
+
+⚠️ Após o cancelamento, caso queira retornar, os valores serão atualizados para a tabela vigente.
+
+Se há algo em que podemos melhorar, ficaremos gratos com seu feedback: https://forms.gle/ytpvYheYUQtyAg6z9
+
+Estaremos ansiosos para o seu retorno! 🤝📋</div>
+    </div>
+
+    <h2>7.6 Confirmação de Cancelamento — /cc</h2>
+    <div class="msgbox">
+      <div class="msg-label">/cc</div>
+      <div class="msg-text">Recebemos sua solicitação de cancelamento. Obrigado pelo tempo que passou conosco!
+
+Se decidir voltar, ficaremos felizes em recebê-lo. Em contato conosco podemos discutir os planos disponíveis.
+
+Desejamos tudo de bom! Abraços, equipe Point 43.</div>
+    </div>
+
+    <h2>7.7 Pausa — Com Atestado</h2>
+    <div class="msgbox">
+      <div class="msg-label">/pausa-atestado</div>
+      <div class="msg-text">Seu plano foi pausado conforme atestado enviado. Melhoras! Qualquer necessidade, estamos à disposição.</div>
+    </div>
+
+    <h2>7.8 Pausa — Sem Atestado</h2>
+    <div class="msgbox">
+      <div class="msg-label">/pausa-taxa</div>
+      <div class="msg-text">Para pausar sem atestado, há uma taxa de serviço:
+Até 30 dias: R$ 25,00
+Até 60 dias: R$ 50,00
+
+Prefere débito no cartão cadastrado ou PIX?
+Chave PIX (CNPJ): 25.149.720/0001-44 — Foccos Serviços Fitness LTDA
+
+Após o pagamento, envie o comprovante por aqui.</div>
+    </div>
+
+    <h2>7.9 Transferência de Plano</h2>
+    <div class="msgbox">
+      <div class="msg-label">/transferencia</div>
+      <div class="msg-text">Para transferir, precisamos de uma solicitação pelo e-mail: point43oficial@gmail.com
+A taxa de serviço é de R$ 25,00.
+
+Prefere débito no cartão cadastrado ou PIX?
+Chave PIX (CNPJ): 25.149.720/0001-44</div>
+    </div>
+
+    <h2>7.10 Aluguel de Quadra — Confirmação</h2>
+    <div class="msgbox">
+      <div class="msg-label">/aluguel-ok</div>
+      <div class="msg-text">Seu agendamento foi confirmado! ✅
+Em caso de cancelamento, avise com 24h de antecedência. Sem aviso, será cobrado o valor da hora reservada.
+Qualquer dúvida, estamos no WhatsApp. Obrigado! 🙌🏻</div>
+    </div>
+  </div>
+
+  <!-- ══════ S8 — QUADRAS ══════ -->
+  <div class="section" id="s8">
+    <div class="section-div">SEÇÃO 8 — OPERAÇÃO DAS QUADRAS E ATIVIDADES</div>
+    <h1>8. Operação das Quadras</h1>
+
+    <h2>8.1 Informações das Aulas</h2>
+    <table>
+      <tr><td class="bold" style="width:240px">Duração</td><td>50 minutos</td></tr>
+      <tr><td class="bold">Número de alunos</td><td>Consultar o app</td></tr>
+      <tr><td class="bold">Materiais — Beach Tennis</td><td>Raquetes e bolas incluídas</td></tr>
+      <tr><td class="bold">Materiais — Vôlei / Futevôlei</td><td>Cliente leva a própria bola</td></tr>
+      <tr><td class="bold">Presença</td><td>O professor registra a presença antes de começar a aula</td></tr>
+    </table>
+
+    <h2>8.2 Aluguel de Quadra</h2>
+    <ul class="bullets">
+      <li>Valor: R$ 70,00/hora — qualquer modalidade</li>
+      <li>Materiais externos: não é permitida entrada com alimentos ou bebidas nas quadras</li>
+      <li>Pet-friendly: permitido com coleira</li>
+      <li>Cancelamento de reserva: aviso com 24h — sem aviso, cobra o valor da hora</li>
+    </ul>
+    <h3>Dados a coletar para reserva:</h3>
+    <ol class="numbered">
+      <li>Modalidade</li>
+      <li>Dia e horário</li>
+      <li>Nome completo</li>
+      <li>Telefone</li>
+    </ol>
+    <h3>Lançar na agenda (Tecnofit):</h3>
+    <ul class="bullets">
+      <li>Tipo: Serviço → Aluguel de Quadra</li>
+      <li>Nome da turma: Aluguel de Quadra + nº da quadra</li>
+      <li>Tipo de aula: Única, sem professor</li>
+      <li>Observação: Nome do cliente + modalidade</li>
+    </ul>
+    <div class="alert" style="border-color:var(--red);background:#FFF5F5">
+      <div class="alert-title">Regra crítica</div>
+      <div class="alert-body">Nunca confirmar reserva sem validação interna da disponibilidade. Nunca alterar o valor. Aguardar comprovante de pagamento antes de confirmar.</div>
+    </div>
+
+    <h2>8.3 Metodologia de Evolução (Munhequeiras)</h2>
+    <div class="progression">START → Branca → Branca+ → Azul → Azul+ → Vermelha → Vermelha+ → Verde → Verde+ → Roxa → Roxa+ → Preta</div>
+
+    <h2>8.4 Atividades Extra Aula</h2>
+    <table>
+      <tr><th>Atividade</th><th>Descrição</th><th>Custo</th></tr>
+      <tr><td class="bold">Day Use</td><td>Sáb, Dom e Feriados — manhã 08h–12h / tarde 16h–20h. Revezamento de sets de 4 games. Não ocorre durante a semana.</td><td>Aluno: 1 cr. / Convidado: R$ 25</td></tr>
+      <tr><td class="bold">Night Use</td><td>Mesma dinâmica do Day Use, período noturno</td><td>Aluno: 1 cr. / Convidado: R$ 25</td></tr>
+      <tr><td class="bold">Raqueteiro</td><td>Atividade tática — todos jogam com todos. Desenvolvimento de jogo e entrosamento.</td><td>1 crédito</td></tr>
+      <tr><td class="bold">Rei e Rainha da Praia</td><td>Aparece no app quando confirmado. Objetivo: 2 pontos + 20 pontos no reinado.</td><td>Aluno: 1 cr. / Convidado: R$ 40</td></tr>
+      <tr><td class="bold">Treino Evolution</td><td>Iniciantes em situação de jogo real com orientação do professor.</td><td>Verificar</td></tr>
+      <tr><td class="bold">Avaliação P43</td><td>Avaliação técnica para subir de munhequeira. Conduzida por professor.</td><td>2 créditos</td></tr>
+    </table>
+
+    <h2>8.5 Metodologia Kids</h2>
+    <table>
+      <tr><th>Modalidade</th><th>Faixa etária</th><th>Foco</th></tr>
+      <tr><td class="bold">🦈 Aula Tubarão</td><td class="center">9–12 anos</td><td>Golpes avançados, tática de dupla, competição saudável</td></tr>
+      <tr><td class="bold">🐌 Aula Cavalo Marinho</td><td class="center">5–8 anos</td><td>Coordenação motora, golpes básicos, socialização</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S9 — POINTBOT ══════ -->
+  <div class="section" id="s9">
+    <div class="section-div">SEÇÃO 9 — POINTBOT — WHATSAPP IA</div>
+    <h1>9. PointBot v2.2 — Assistente Oficial</h1>
+    <p class="text">Agente de IA do Point 43, rodando no FitZap. Atende leads e alunos no WhatsApp 24/7. A equipe humana atua nos casos abaixo.</p>
+
+    <h2>9.1 O Que o PointBot Resolve Sozinho</h2>
+    <table>
+      <tr><th>Fluxo</th><th>O que resolve</th></tr>
+      <tr><td>Venda Consultiva</td><td>Funil de 6 perguntas, plano ideal, link de pagamento</td></tr>
+      <tr><td>Informações Gerais</td><td>Planos, valores, horários, endereço, funcionamento</td></tr>
+      <tr><td>Wellhub / TotalPass</td><td>Instruções completas, token, grupo WhatsApp</td></tr>
+      <tr><td>Aluguel de Quadra</td><td>Coleta dados e direciona para validação humana</td></tr>
+      <tr><td>Chuva / Cancelamento de Aula</td><td>Orienta verificar grupos oficiais</td></tr>
+      <tr><td>Check-in / App</td><td>Tutorial, link do vídeo de ajuda</td></tr>
+      <tr><td>Fisioterapia MedSports</td><td>Encaminha para grupo WhatsApp correto</td></tr>
+      <tr><td>Pausa de Plano</td><td>Informa condições e valores</td></tr>
+      <tr><td>Cancelamento de Plano</td><td>Coleta motivo, informa e-mail para formalizar</td></tr>
+      <tr><td>Atendimento Premium (Black/Infinity)</td><td>Atendimento prioritário, nunca redireciona para app</td></tr>
+    </table>
+
+    <h2>9.2 Quando o Humano Deve Assumir</h2>
+    <ul class="bullets">
+      <li>Aluno pede explicitamente para falar com uma pessoa (→ interromper qualquer fluxo imediatamente)</li>
+      <li>Situações de conflito ou reclamações graves</li>
+      <li>Renovação de plano — sempre via atendente humano</li>
+      <li>Confirmação de reserva de aluguel de quadra</li>
+      <li>Lead "morno" após ver o preço — bot sinaliza, humano faz follow-up</li>
+    </ul>
+
+    <div class="alert">
+      <div class="alert-title">E-mail de cancelamento</div>
+      <div class="alert-body">Fornecer somente quando o aluno solicitar cancelamento formal: point43oficial@gmail.com. Nunca em outros contextos.</div>
+    </div>
+  </div>
+
+  <!-- ══════ S10 — FINANCEIRO ══════ -->
+  <div class="section" id="s10">
+    <div class="section-div">SEÇÃO 10 — FINANCEIRO, PAGAMENTOS E INADIMPLÊNCIA</div>
+    <h1>10. Financeiro e Pagamentos</h1>
+
+    <h2>10.1 Meios de Pagamento</h2>
+    <table>
+      <tr><th>Produto</th><th>Meio</th></tr>
+      <tr><td>Planos Light, Experience, Black, Infinity</td><td>Cartão recorrente (cobrança automática mensal)</td></tr>
+      <tr><td>Aluguel de Quadra</td><td>PIX — CNPJ 25.149.720/0001-44</td></tr>
+      <tr><td>Aula Experimental</td><td>PIX ou link Tecnofit</td></tr>
+      <tr><td>Transferência / Pausa</td><td>Débito cartão ou PIX — CNPJ 25.149.720/0001-44</td></tr>
+    </table>
+
+    <div class="alert">
+      <div class="alert-title">Plano Infinity — créditos acumulados</div>
+      <div class="alert-body">O Infinity é recorrente (cobrança mensal no cartão). A diferença em relação aos demais planos: os créditos não expiram. Se o aluno não usar todos no mês, os créditos são acumulados e podem ser resgatados sem custo no mês seguinte.</div>
+    </div>
+
+    <div class="alert" style="border-color:var(--red);background:#FFF5F5">
+      <div class="alert-title">Inadimplência — bloqueio imediato</div>
+      <div class="alert-body">Qualquer plano (Light, Experience, Black ou Infinity): bloqueio automático imediato caso o pagamento mensal não seja identificado. Iniciar jornada de cobrança D+0 assim que o bloqueio ocorrer. Responsável financeiro: Benedito (CFO).</div>
+    </div>
+
+    <h2>10.2 Pausa de Plano</h2>
+    <table>
+      <tr><th>Duração</th><th>Sem atestado</th><th>Com atestado</th></tr>
+      <tr><td>7 a 30 dias</td><td>R$ 25,00</td><td class="green">Gratuita</td></tr>
+      <tr><td>31 a 60 dias</td><td>R$ 50,00</td><td class="green">Gratuita</td></tr>
+    </table>
+    <ul class="bullets" style="margin-top:12px">
+      <li>Mínimo: 7 dias / Máximo: 60 dias</li>
+      <li>Solicitação com mínimo de 1 dia útil de antecedência</li>
+      <li>Pausas não prorrogam a validade total do plano — apenas congelam temporariamente o uso</li>
+      <li>Ausências sem formalização não configuram pausa: os créditos continuam correndo normalmente</li>
+    </ul>
+    <div class="alert">
+      <div class="alert-title">Bloqueio Dez/Jan</div>
+      <div class="alert-body">Nos meses de dezembro e janeiro, pausas só são aceitas com atestado médico.</div>
+    </div>
+
+    <h2>10.3 Renovação Automática</h2>
+    <div class="alert">
+      <div class="alert-title">Regra contratual — comunicar sempre</div>
+      <div class="alert-body">A renovação é automática ao fim da validade dos créditos, utilizando o mesmo método de pagamento cadastrado. O aluno deve solicitar cancelamento ANTES do término da validade caso não deseje renovar. Quando o aluno reclamar de cobrança não esperada, verificar se ele solicitou cancelamento antes do vencimento.</div>
+    </div>
+
+    <h2>10.4 Jornada de Cobrança (Inadimplência D0–D5)</h2>
+    <table>
+      <tr><th style="width:60px">Dia</th><th>Ação</th></tr>
+      <tr><td class="center bold">D+0</td><td>Aviso amigável assim que bloquear. Tom leve, só lembrar. Enviar link de pagamento.</td></tr>
+      <tr><td class="center bold">D+1</td><td>Follow-up pessoal. Demonstrar preocupação. Reenviar link.</td></tr>
+      <tr><td class="center bold">D+2</td><td>Tom mais firme. Informar que o acesso só volta após regularização. Pedir urgência.</td></tr>
+      <tr><td class="center bold">D+3</td><td>Enviar boleto por e-mail + WhatsApp com cláusulas contratuais relevantes.</td></tr>
+      <tr><td class="center bold">D+4</td><td>Reenvio do boleto por e-mail. Última chamada antes da política de cancelamento.</td></tr>
+      <tr><td class="center bold">D+5</td><td>Sem resposta: encaminhar para coordenação definir próximos passos da tratativa. Não cancelar automaticamente.</td></tr>
+    </table>
+
+    <h3>Mensagem D+0 — Aviso amigável:</h3>
+    <div class="msgbox">
+      <div class="msg-label">D+0 — /bl</div>
+      <div class="msg-text">Olá {{NOME}}! Tudo bem? Aqui é {{SEU_NOME}}, do Point 43!
+
+Passando só para lembrar que seu plano foi renovado recentemente e o pagamento ainda está pendente 😊
+
+Se já tiver feito, desconsidere. Caso não tenha conseguido ainda, segue o link para facilitar:
+
+LINK</div>
+    </div>
+
+    <h3>Mensagem D+2 — Tom firme:</h3>
+    <div class="msgbox">
+      <div class="msg-label">D+2 — /2contato</div>
+      <div class="msg-text">Oi, {{NOME}}. Tudo certo?
+
+Estamos tentando contato há alguns dias sobre a renovação do plano e até o momento o pagamento não foi identificado.
+
+É muito importante resolver isso ainda hoje para evitar a suspensão do acesso às aulas.
+
+Se já fez o pagamento, envie o comprovante. Se ainda não fez, segue o link:
+
+LINK
+
+Aguardamos retorno com urgência.</div>
+    </div>
+
+    <h2>10.5 Inadimplência — Regra Geral</h2>
+    <ul class="bullets">
+      <li>Bloqueio automático imediato em qualquer plano (Light, Experience, Black, Infinity) caso o pagamento não seja identificado</li>
+      <li>Não há período de tolerância por plano — o bloqueio é imediato para todos</li>
+      <li>A CONTRATADA pode cobrar no cartão cadastrado ou emitir boleto, mesmo após cancelamento ou rescisão</li>
+    </ul>
+
+    <h2>10.6 Regras de Cancelamento</h2>
+    <ul class="bullets">
+      <li>Nunca cancelar sem coletar o motivo primeiro</li>
+      <li>Solicitação formal exclusivamente por e-mail: point43oficial@gmail.com</li>
+      <li>Após cancelamento: valores seguem tabela vigente na data de retorno</li>
+      <li>Planos anteriores a 2026: não podem ser reativados após cancelamento</li>
+    </ul>
+
+    <h2>10.7 Processo Operacional de Cancelamento</h2>
+    <p class="text">Ao receber um e-mail de cancelamento, seguir rigorosamente esta sequência:</p>
+
+    <table style="margin-top:12px">
+      <tr><th style="width:40px">#</th><th style="width:180px">Etapa</th><th>Como fazer</th></tr>
+      <tr>
+        <td class="center bold">1</td>
+        <td class="bold">Registrar no grupo</td>
+        <td>Tirar print do e-mail de cancelamento e enviar no grupo <strong>Cancelados</strong> no WhatsApp</td>
+      </tr>
+      <tr>
+        <td class="center bold">2</td>
+        <td class="bold">Confirmar por e-mail</td>
+        <td>Responder o e-mail do aluno confirmando o cancelamento — usar template <strong>/cc</strong> (Seção 7.6)</td>
+      </tr>
+      <tr>
+        <td class="center bold">3</td>
+        <td class="bold">Cancelar no sistema</td>
+        <td>Cancelar o plano do aluno no <strong>Tecnofit</strong>. Registrar o motivo informado no e-mail.</td>
+      </tr>
+      <tr>
+        <td class="center bold">4</td>
+        <td class="bold">Tentar retenção</td>
+        <td>Entrar em contato pelo WhatsApp para entender o motivo real, quebrar a objeção e tentar reter o aluno — ver roteiro abaixo</td>
+      </tr>
+    </table>
+
+    <div class="alert" style="border-color:var(--red);background:#FFF5F5;margin-top:16px">
+      <div class="alert-title">⚠️ Ordem obrigatória</div>
+      <div class="alert-body">Nunca cancelar no sistema antes de registrar no grupo e confirmar por e-mail. A tentativa de retenção acontece <strong>após</strong> o cancelamento já ter sido processado — não segurar o cancelamento como forma de pressão.</div>
+    </div>
+
+    <h3>Roteiro de Retenção (Passo 4)</h3>
+    <table>
+      <tr><th>Motivo do cancelamento</th><th>Abordagem</th></tr>
+      <tr><td>Financeiro / preço</td><td>Oferecer downgrade de plano ou pausa. Apresentar custo por aula. Não oferecer desconto fora da política.</td></tr>
+      <tr><td>Falta de tempo</td><td>Apresentar opção de pausa (até 60 dias). Perguntar qual frequência seria viável agora.</td></tr>
+      <tr><td>Não está usando</td><td>Entender o motivo do não uso. Oferecer reativação com acompanhamento da equipe.</td></tr>
+      <tr><td>Lesão / saúde</td><td>Oferecer pausa com atestado (gratuita). Mencionar parceria MedSports.</td></tr>
+      <tr><td>Insatisfação</td><td>Ouvir sem interromper. Validar. Escalar para COO se necessário. Nunca discutir.</td></tr>
+      <tr><td>Mudança de cidade</td><td>Informar sobre futuras unidades franqueadas. Registrar como lead potencial para novas praças.</td></tr>
+    </table>
+
+    <div class="msgbox" style="margin-top:16px">
+      <div class="msg-label">Abertura de retenção — /retencao</div>
+      <div class="msg-text">Olá {{NOME}}, tudo bem? Aqui é {{SEU_NOME}}, do Point 43 😊
+
+Recebi seu pedido de cancelamento e já processamos tudo certinho por aqui.
+
+Antes de nos despedirmos, queria entender melhor o que aconteceu. Tem alguma coisa que poderíamos ter feito diferente? Fico à disposição para conversar!</div>
+    </div>
+  </div>
+
+  <!-- ══════ S11 — PROGRAMAS ══════ -->
+  <div class="section" id="s11">
+    <div class="section-div">SEÇÃO 11 — PROGRAMAS E PARCERIAS</div>
+    <h1>11. Programas e Parcerias</h1>
+
+    <h2>11.1 Wellhub (Gympass) e TotalPass</h2>
+    <ul class="bullets">
+      <li>Wellhub: Silver+ ou superior</li>
+      <li>TotalPass: TP5</li>
+      <li>Liberação: Seg–Sex 08h–22h</li>
+      <li>Crédito válido por 3 dias</li>
+    </ul>
+    <div class="alert">
+      <div class="alert-title">Importante</div>
+      <div class="alert-body">Nunca falar de planos, valores ou matrícula no fluxo Wellhub/TotalPass. O usuário já tem convênio — basta orientar o acesso.</div>
+    </div>
+
+    <h2>11.2 Fisioterapia — MedSports</h2>
+    <ul class="bullets">
+      <li>Somente para alunos ativos</li>
+      <li>2 créditos por sessão</li>
+      <li>Endereço: Rua Senador Souza Naves, 1283 — Sala 201</li>
+      <li>Agendamento: https://chat.whatsapp.com/F3oHGxEdDUjBf9bXgxJSzH</li>
+      <li>Chegar 10 minutos antes da sessão</li>
+      <li>Cancelamentos e remarcações: sempre via grupo com antecedência</li>
+    </ul>
+
+    <h2>11.3 MMV — Minha Melhor Versão</h2>
+    <ul class="bullets">
+      <li>Programa de emagrecimento e transformação física</li>
+      <li>Complementar ao plano — nunca substitui</li>
+      <li>Mencionar somente quando aluno falar em emagrecimento</li>
+    </ul>
+
+    <h2>11.4 Plano Corporativo (B2B)</h2>
+    <ul class="bullets">
+      <li>Beach tennis como benefício corporativo para empresas</li>
+      <li>Condições: alinhar com o COO (Mateus)</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S12 — PÓS-VENDA ══════ -->
+  <div class="section" id="s12">
+    <div class="section-div">SEÇÃO 12 — PÓS-VENDA E ONBOARDING DO ALUNO</div>
+    <h1>12. Pós-Venda e Onboarding</h1>
+
+    <h2>12.1 Sequência de Onboarding (D1–D3)</h2>
+    <table>
+      <tr><th style="width:60px">Dia</th><th>Ação</th><th>Mensagem / objetivo</th></tr>
+      <tr><td class="center bold">D+1</td><td>Boas-vindas</td><td>Apresentar-se, enviar app + grupos, explicar check-in e regras básicas</td></tr>
+      <tr><td class="center bold">D+2</td><td>Agendamento</td><td>Verificar se agendou 1ª aula, tirar dúvidas, perguntar como foi</td></tr>
+      <tr><td class="center bold">D+3</td><td>Feedback</td><td>Coletar NPS informal, oferecer indicação e cross-sell de aula individual</td></tr>
+    </table>
+
+    <h3>Mensagem D+1 — Boas-vindas personalizada:</h3>
+    <div class="msgbox">
+      <div class="msg-label">D+1</div>
+      <div class="msg-text">Oii {{NOME}}, como você está? Eu sou {{SEU_NOME}}, da equipe Point 43, seja muito bem-vindo(a)! 😊
+
+Vou te enviar tudo que precisa para começar suas aulas.
+
+Baixe o App:
+• iOS: https://apps.apple.com/us/app/point-43/id1570310003
+• Android: https://play.google.com/store/apps/details?id=br.com.point43
+
+Aceite o termo que vai chegar no e-mail para ativar seu acesso.
+Após aceitar, você recebe a senha para login.
+
+Check-in: até 24h antes / fecha 30min antes
+Cancelar aula: até 2h antes (crédito retorna)
+
+Grupo da sua munhequeira: {{LINK_GRUPO}}
+
+Qualquer dúvida, estou aqui! 🙌🏻</div>
+    </div>
+
+    <h2>12.2 Follow-up Pós Bloqueio / Experimental</h2>
+    <table>
+      <tr><th>Contexto</th><th>Mensagem de abertura (D+1)</th></tr>
+      <tr><td>Start Experience</td><td><em>"Vi que você finalizou o plano Start Experience. Como foi sua experiência? 🥰"</em></td></tr>
+      <tr><td>Aula Experimental</td><td><em>"Vi que você fez uma aula experimental. Como foi? Gostou da quadra e do professor? 😁"</em></td></tr>
+      <tr><td>Day Use</td><td><em>"Vi que você fez um Day Use com a gente. Como foi seu dia? 🤩"</em></td></tr>
+      <tr><td>Aula Avulsa</td><td><em>"Vi que você fez uma aula avulsa. Gostou? 🥰"</em></td></tr>
+    </table>
+
+    <h2>12.3 Cross-Sell e Ofertas Pós-Matrícula</h2>
+    <div class="msgbox">
+      <div class="msg-label">Aula individual (cross-sell)</div>
+      <div class="msg-text">{{NOME}}, parabéns por entrar para o Point 43! 🙌
+Que tal uma sessão individual com professor por R$ 49,90?
+Vamos trabalhar técnica, nivelamento e personalizar seu treino. Quer agendar?</div>
+    </div>
+
+    <h2>12.4 Programa de Indicações</h2>
+    <div class="msgbox">
+      <div class="msg-label">/indicacao</div>
+      <div class="msg-text">Para agradecer por fazer parte do Point 43, temos uma oferta especial:
+
+🎁 A cada 4 contatos de amigos indicados, você ganha 1 crédito extra!
+Não precisa que eles se matriculem — só enviar os contatos já vale!
+
+Como funciona:
+1. Envie os contatos (nome + telefone) aqui ou no grupo
+2. Você recebe a notificação dos créditos
+3. Use para agendar qualquer atividade no Point 43!</div>
+    </div>
+  </div>
+
+  <!-- ══════ S13 — SITUAÇÕES ══════ -->
+  <div class="section" id="s13">
+    <div class="section-div">SEÇÃO 13 — SITUAÇÕES ESPECIAIS</div>
+    <h1>13. Situações Especiais</h1>
+
+    <h2>13.1 Chuva e Cancelamento de Aulas</h2>
+    <ul class="bullets">
+      <li>Cancelamentos são comunicados nos grupos oficiais do WhatsApp por munhequeira</li>
+      <li>Se não houve aviso nos grupos: programação segue normal</li>
+      <li>Aluno que perdeu aula por cancelamento: crédito devolvido</li>
+    </ul>
+
+    <h2>13.2 Suporte de Crédito</h2>
+    <p class="text">Coletar obrigatoriamente:</p>
+    <ol class="numbered">
+      <li>Nome completo</li>
+      <li>Data e horário da aula que não entrou</li>
+      <li>Plano que está usando</li>
+    </ol>
+    <p class="text" style="margin-top:8px">Após coletar: direcionar para equipe registrar. Nunca prometer devolução imediata.</p>
+
+    <h2>13.3 Renovação de Plano</h2>
+    <div class="alert">
+      <div class="alert-title">Sempre via atendente humano</div>
+      <div class="alert-body">Renovação NÃO é feita via link ou PointBot. Coletar nome completo e passar para o atendente responsável.</div>
+    </div>
+
+    <h2>13.4 Situações de Conflito</h2>
+    <ol class="numbered">
+      <li>Manter a calma. Não responder na defensiva</li>
+      <li>Ouvir completamente antes de responder</li>
+      <li>Validar: "Entendo sua situação"</li>
+      <li>Se não tiver autonomia: escalar para COO imediatamente</li>
+      <li>Nunca prometer o que não pode cumprir</li>
+    </ol>
+
+    <h2>13.5 Plano Black / Infinity — Atendimento Premium</h2>
+    <ul class="bullets">
+      <li>Prioridade no atendimento — nunca redirecionar para o app</li>
+      <li>Coletar: data, horário, atividade e nome do aluno</li>
+      <li>Confirmar com a equipe e retornar ao cliente</li>
+    </ul>
+
+    <h2>13.6 Ausência ≠ Pausa</h2>
+    <div class="alert" style="border-color:var(--red);background:#FFF5F5">
+      <div class="alert-title">Regra contratual — importante para cobranças</div>
+      <div class="alert-body">Ausências prolongadas sem formalização de pausa NÃO configuram pausa. Os créditos continuam correndo normalmente dentro da validade contratada. Quando o aluno reclamar de créditos perdidos por não ter ido treinar, informar que a pausa precisa ser solicitada formalmente com antecedência mínima de 1 dia útil.</div>
+    </div>
+
+    <h2>13.7 Recesso Anual</h2>
+    <ul class="bullets">
+      <li>O Point 43 entra em recesso anual no Carnaval, Natal e Ano Novo</li>
+      <li>Comunicar alunos com antecedência pelos grupos oficiais de WhatsApp</li>
+      <li>Durante o recesso: créditos não correm / aulas não são descontadas</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S14 — KPIs ══════ -->
+  <div class="section" id="s14">
+    <div class="section-div">SEÇÃO 14 — KPIS, SLAS E INDICADORES</div>
+    <h1>14. KPIs e Indicadores de Qualidade</h1>
+
+    <h2>14.1 Metas Operacionais</h2>
+    <table>
+      <tr><th>Indicador</th><th>Meta</th><th>Frequência</th></tr>
+      <tr><td>Tempo médio de 1ª resposta (leads)</td><td class="green">≤ 5 minutos</td><td>Diário</td></tr>
+      <tr><td>Taxa de ocupação por faixa (manhã/tarde/noite)</td><td class="green">≥ 70%</td><td>Diário</td></tr>
+      <tr><td>No-show (WO — sem cancelamento)</td><td class="bold">≤ 5%/mês</td><td>Semanal</td></tr>
+      <tr><td>NPS</td><td class="green">≥ 75</td><td>Mensal</td></tr>
+      <tr><td>Conversão experimental → plano</td><td class="green">≥ 40%</td><td>Mensal</td></tr>
+      <tr><td>Inadimplência &gt; 7 dias</td><td class="red">≤ 3% base ativa</td><td>Semanal</td></tr>
+      <tr><td>Solução de tickets de suporte</td><td class="bold">≤ 24h úteis</td><td>Diário</td></tr>
+    </table>
+
+    <h2>14.2 Rotina de Publicação de KPIs</h2>
+    <table>
+      <tr><th>Frequência</th><th>O que publicar / acompanhar</th></tr>
+      <tr><td class="bold">Diário</td><td>Wellhub/TotalPass liberados • Vagas e divulgação de aulas • Cobranças em andamento • Leads ativos e ativados</td></tr>
+      <tr><td class="bold">Semanal</td><td>Agenda dos professores e grade (Mateus) • Total de check-ins do mês (Mateus) • Inadimplência (Benedito) • Revisão de atendimentos (Gustavo) • Leads x conversões (Gustavo) • Alunos cancelados (Sócios)</td></tr>
+      <tr><td class="bold">Mensal</td><td>DRE gerencial, inadimplência, NPS, LTV/CAC</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S15 — RACI ══════ -->
+  <div class="section" id="s15">
+    <div class="section-div">SEÇÃO 15 — RACI — RESPONSABILIDADES</div>
+    <h1>15. RACI — Responsabilidades por Função</h1>
+    <table>
+      <tr><th>Função</th><th>Papel</th><th>Principais responsabilidades</th></tr>
+      <tr><td class="bold">Backoffice</td><td class="center">R — Executa</td><td>Atendimento, cadastros, cobranças, pausas, cancelamentos, relatórios</td></tr>
+      <tr><td class="bold">Coordenador(a)</td><td class="center">A — Responde</td><td>Metas, escalas, qualidade, conflitos, indicadores, aprova descontos</td></tr>
+      <tr><td class="bold">Professores</td><td class="center">C — Consultado</td><td>Presença, feedback de alunos, reposições, conteúdo técnico</td></tr>
+      <tr><td class="bold">Marketing</td><td class="center">C — Consultado</td><td>Comunicação, artes, anúncios, captação, NPS</td></tr>
+      <tr><td class="bold">Financeiro</td><td class="center">I/A — Informado</td><td>Pagamentos, repasses, DRE, royalties, comissões</td></tr>
+    </table>
+
+    <h2>Regras de Escalonamento</h2>
+    <ul class="bullets">
+      <li>Qualquer problema que o Backoffice não consiga resolver → escalar para Coordenação</li>
+      <li>Questões financeiras, inadimplência grave ou decisões de cobrança → escalar para Benedito (CFO)</li>
+      <li>Conflitos graves ou decisões fora da tabela → escalar para COO (Mateus)</li>
+      <li>Decisões estratégicas ou exceções comerciais → CEO (Gustavo)</li>
+    </ul>
+
+    <div class="alert">
+      <div class="alert-title">Política de Reposição de Aulas</div>
+      <div class="alert-body">Não trabalhamos com reposição de aulas. O próprio aluno pode desmarcar a aula pelo app quando não for comparecer, e o crédito retorna automaticamente. Não criar expectativa de reposição manual em nenhuma situação.</div>
+    </div>
+  </div>
+
+  <!-- ══════ S16 — FECHAMENTO ══════ -->
+  <div class="section" id="s16">
+    <div class="section-div">SEÇÃO 16 — FECHAMENTO DE MÊS</div>
+    <h1>16. Fechamento de Mês — Checklist</h1>
+    <ul class="checklist">
+      <li>Atualizar planilha de horas extras</li>
+      <li>Atualizar planilha de credenciados (nº de check-ins)</li>
+      <li>Atualizar planilha de parceiros (nº de check-ins)</li>
+      <li>Atualizar planilha de comissão dos professores</li>
+      <li>Atualizar metas de professores e Backoffice</li>
+      <li>Verificar royalties e G&amp;A lançados</li>
+      <li>Auditar lançamentos errôneos</li>
+      <li>Organizar pagamentos e salários no sistema</li>
+      <li>Fechar DRE gerencial do mês</li>
+      <li>Publicar relatório mensal: inadimplência, NPS, LTV/CAC</li>
+    </ul>
+  </div>
+
+  <!-- ══════ S17 — ONBOARDING COLABORADOR ══════ -->
+  <div class="section" id="s17">
+    <div class="section-div">SEÇÃO 17 — ONBOARDING DE NOVO COLABORADOR</div>
+    <h1>17. Onboarding — Novo Integrante Backoffice</h1>
+    <table>
+      <tr><th style="width:40px">#</th><th>Etapa</th><th>O que fazer</th></tr>
+      <tr><td class="center bold">1</td><td class="bold">Entrevista</td><td>Perfil e fit cultural. Assinar Termo de Confidencialidade (LGPD).</td></tr>
+      <tr><td class="center bold">2</td><td class="bold">Cadastros</td><td>Criar acesso no Tecnofit, FitZap, Drive.</td></tr>
+      <tr><td class="center bold">3</td><td class="bold">Boas-vindas</td><td>Apresentar missão, valores e expectativas da função.</td></tr>
+      <tr><td class="center bold">4</td><td class="bold">Treino Tecnofit</td><td>Planos, créditos, pausas, cancelamentos, cadastro de clientes.</td></tr>
+      <tr><td class="center bold">5</td><td class="bold">Treino Atendimento</td><td>Tom de voz, SLAs, templates, frases oficiais.</td></tr>
+      <tr><td class="center bold">6</td><td class="bold">Links e grupos</td><td>Enviar diretório completo (Seção 3 deste manual).</td></tr>
+      <tr><td class="center bold">7</td><td class="bold">Leitura do POP</td><td>Apresentar e explicar este manual completo.</td></tr>
+      <tr><td class="center bold">8</td><td class="bold">Meta x Bonificação</td><td>Explicar critérios: tempo de resposta, NPS, conversões, inadimplência.</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════ S18 — LGPD ══════ -->
+  <div class="section" id="s18">
+    <div class="section-div">SEÇÃO 18 — POLÍTICAS E LGPD</div>
+    <h1>18. Políticas e LGPD</h1>
+    <ul class="bullets">
+      <li>Dados pessoais coletados somente para finalidade operacional: matrícula, agendamento, cobrança</li>
+      <li>Solicitar consentimento quando necessário; permitir opt-out de comunicações</li>
+      <li>Evitar planilhas com dados sensíveis fora dos repositórios oficiais (Drive seguro)</li>
+      <li>Nunca compartilhar dados de alunos com terceiros sem autorização formal</li>
+      <li>Em caso de dúvida sobre tratamento de dados: escalar para coordenação</li>
+    </ul>
+    <div class="alert">
+      <div class="alert-title">Confidencialidade</div>
+      <div class="alert-body">Todo colaborador assina Termo de Confidencialidade no onboarding. O não cumprimento implica responsabilidade civil e trabalhista.</div>
+    </div>
+  </div>
+
+  <!-- ══════ S19 — VERSÃO ══════ -->
+  <div class="section" id="s19">
+    <div class="section-div">SEÇÃO 19 — CONTROLE DE VERSÃO</div>
+    <h1>19. Controle de Versão</h1>
+    <table>
+      <tr><th>Versão</th><th>Data</th><th>Alterações</th></tr>
+      <tr><td class="bold">v2.0 (atual)</td><td>Junho/2026</td><td>Versão consolidada: incluídos SLAs, diretório completo de grupos, jornada de cobrança D0–D5, KPIs, RACI, fechamento de mês, onboarding, kids, atividades extra, cross-sell, indicação, LGPD. Mesclagem v1.0 + layout anterior.</td></tr>
+      <tr><td class="bold">Próxima revisão</td><td>{{DATA}}</td><td>Responsável: {{NOME}}</td></tr>
+    </table>
+
+    <div class="alert">
+      <div class="alert-title">Documento vivo</div>
+      <div class="alert-body">Qualquer solicitação de melhoria deve ser registrada no grupo Mensagens Padrão / Backoffice e aprovada pela Coordenação antes de ser aplicada nas unidades.</div>
+    </div>
+
+    <!-- RODAPÉ FINAL -->
+    <div style="background:var(--black);padding:28px 32px;text-align:center;border-radius:6px;margin-top:40px">
+      <div style="color:var(--gold);font-size:20px;font-weight:bold;letter-spacing:2px">POINT 43 — LONDRINA</div>
+      <div style="color:#fff;font-size:13px;margin-top:8px">Manual POP v2.0 — Junho/2026 &nbsp;|&nbsp; point43.com.br</div>
+      <div style="color:#555;font-size:11px;margin-top:6px">Documento interno — confidencial. Não distribuir sem autorização.</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Scroll spy para sidebar
+  const sections = document.querySelectorAll('[id^="s"], #cover');
+  const links = document.querySelectorAll('#sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`#sidebar nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '-60px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
